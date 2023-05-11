@@ -25,8 +25,8 @@ FROM orders;
 SELECT customerNumber, customerName
 FROM customers
 WHERE NOT EXISTS (SELECT customerNumber
-					FROM orders
-					WHERE customers.customerNumber = orders.customerNumber);
+		  FROM orders
+		  WHERE customers.customerNumber = orders.customerNumber);
 
 
 -- Customers with special requests/complaints
@@ -61,8 +61,8 @@ LIMIT 10;
 -- Calculate low stock using subquery
 
 SELECT productCode, SUM(quantityOrdered) /(SELECT quantityInStock
-											FROM products
-											WHERE orderdetails.productCode = products.productCode) AS lowStock
+					   FROM products
+					   WHERE orderdetails.productCode = products.productCode) AS lowStock
 FROM orderdetails
 GROUP BY productCode
 ORDER BY lowStock DESC
@@ -77,8 +77,8 @@ ORDER BY totalSales DESC;
 
 WITH restockPriority AS (
 SELECT productCode, SUM(quantityOrdered) /(SELECT quantityInStock
-											FROM products
-											WHERE orderdetails.productCode = products.productCode) AS lowStock
+					   FROM products
+					   WHERE orderdetails.productCode = products.productCode) AS lowStock
 FROM orderdetails
 GROUP BY productCode
 ORDER BY lowStock DESC
@@ -95,7 +95,7 @@ ORDER BY totalSales DESC;
 SELECT customerNumber, SUM(quantityOrdered * (priceEach - buyPrice)) AS profit
 FROM orderdetails
 JOIN orders
-ON	orderdetails.orderNumber = orders.orderNumber
+ON orderdetails.orderNumber = orders.orderNumber
 JOIN products
 ON orderdetails.productCode = products.productCode
 GROUP BY customerNumber;
@@ -106,7 +106,7 @@ CREATE VIEW vipCustomers AS
 SELECT customerNumber, SUM(quantityOrdered * (priceEach - buyPrice)) AS profit
 FROM orderdetails
 JOIN orders
-ON	orderdetails.orderNumber = orders.orderNumber
+ON orderdetails.orderNumber = orders.orderNumber
 JOIN products
 ON orderdetails.productCode = products.productCode
 GROUP BY customerNumber;
